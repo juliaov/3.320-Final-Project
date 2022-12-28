@@ -10,15 +10,15 @@ alaninedypeptide.ipynb contains the code for enchanced metadynamics method appli
 
 Metadynamics is an enhanced sampling technic that allows us to estimate free energy of the system in the more efficient way than normal molecular dynamics (MD). How does it work? Let me explain this on the toy example of a particle in a potential well. If we initialize the particle at a random point of the well and run classical MD, the particle will go to the minimum and will be stacked there for quite a long time. There is a possibility for a particle to overcome the barrier, however, it is very low, therefore it will take us a long time to go to a different minimum and sample the whole collective variable space (Fig.1). Therefore, a more advanced technic, namely, metadynamics is needed.
 
-<div align="center"> <img src="metad.gif" alt="Figure 1" width="400"/>
+<div align="center"> <img src="Figures/metad.gif" alt="Figure 1" width="400"/>
 <div align="center"> Figure 1.
  
 <div align="left">
 Let’s take a look at metadynamics algorithm, which is also reffered to as a computational sand. Each time the particle visits a specific point in collective variable (CV) space, we will add a biasing potential to that point, which will add an additional force and make our particle go to another point in CV space. The bigger the time a particle will spend at one point the higher the barrier gets, which you can see from the formula below. After some time, the particle will explore the whole CV space and the sum of biasing potential together with the free energy will be constant, which allows us to estimate the free energy, using the following formula. 
  
- <div align="center"> <img src="Picture3.png" alt="" width="500"/>
+ <div align="center"> <img src="Figures/Picture3.png" alt="" width="500"/>
   
- <div align="center"> <img src="Picture2.png" alt="" width="400"/>
+ <div align="center"> <img src="Figures/Picture2.png" alt="" width="400"/>
 <div align="center"> Metadynamics pseudocode.
  
   <div align="left">
@@ -30,7 +30,7 @@ Let’s take a look at metadynamics algorithm, which is also reffered to as a co
 ### Adversarial attacks on neural networks
    
  Adversarial attacks are meant to fool a neural network, be it classifier or regressor. The smallest addition of noise that will not be comprehensible in human eyes can make the neural network wrong. Adversarial attacks are mostly harmful threats to an existing ML model, but they can be used wisely as well. 
-<div align="center"> <img src="Picture5.png" alt="" width="300"/>
+<div align="center"> <img src="Figures/Picture5.png" alt="" width="300"/>
 <div align="center"> Example of adversarial attack.
  
   <div align="left">
@@ -38,7 +38,7 @@ Let’s take a look at metadynamics algorithm, which is also reffered to as a co
 ### Adversarial attack to improve Neural Force fields
    
  Neural Network inter-atomic potentials are currently very reliable, being able to predict with DFT accuracy but also lot faster. However, they are highly restricted to training data region. Adversarial attack has been recently used to sample geometry that NFF is highly uncertain about. These frames may have been achieved alternatively by molecular dynamics but they take up a lot of time. These adversarial attacks can obtain highly uncertain frames quite fast and then they can be put back in training data for active learning of the ML model.
- <div align="center"> <img src="Picture7.png" alt="" width="600"/>
+ <div align="center"> <img src="Figures/Picture7.png" alt="" width="600"/>
  
   <div align="left">
 
@@ -48,19 +48,19 @@ Let’s take a look at metadynamics algorithm, which is also reffered to as a co
    
    In order to implement that we suggest the following algorithm. Suppose, at the time t the CV of the first system has the value s1. First, we calculate the variance of bias potential for all points in configurational space. As was said earlier, our goal is to maximize the uncertainty. However, the following remark is very important. We want not only to maximize the uncertainty but we also want to prevent our system from going to the high-energy region. Therefore, we need to maximize the following function Q. After that we calculate the gradient of the Q with respect to s and move from point s1 to point s2, which will correspond in the following change of normal coordinates $\Delta r$. 
    
-  <div align="center">   <img src="Picture8.png" alt="" width="800"/>
+  <div align="center">   <img src="Figures/Picture8.png" alt="" width="800"/>
      <div align="left">
    
    To summarize the new approach, the algorithm for metadynamics with the use of adversarial attacks is presented below.
    
-  <div align="center">   <img src="Picture9.png" alt="" width="400"/>
+  <div align="center">   <img src="Figures/Picture9.png" alt="" width="400"/>
      <div align="left">
    
  ### 1D potential well
    
    For 1D double well, we start with three NVE trajectories with different initial position and velocities. Arbitrary units are chosen but to compare everything they are the same between metadynamics and adversarial attack. With adversarial attack, the bias potential became diffusive much earlier and thus we can sample faster and converge to free energy faster than actual metadynamics.
    
-  <div align="center">   <img src="Picture11.png" alt="" width="700"/> 
+  <div align="center">   <img src="Figures/Picture11.png" alt="" width="700"/> 
      <div align="left">
    
    ### 2D potential well
@@ -68,33 +68,33 @@ Let’s take a look at metadynamics algorithm, which is also reffered to as a co
    For any CV we give, adversarial attacks help us to achieve uniformity along the CV-direction much faster than metadynamics. Even for a ‘bad’ CV.
    
 <div align="center"> Metadynamics
-<div align="center"> <img src="md.gif" alt="" width="400"/> 
+<div align="center"> <img src="Figures/md.gif" alt="" width="400"/> 
     
 <div align="center"> Metadynamics + Adversarial attacks
-<div align="center"> <img src="md adv.gif" alt="" width="400"/> 
+<div align="center"> <img src="Figures/md adv.gif" alt="" width="400"/> 
     
 <div align="left"> As we mentioned before, the adversarial attacks ‘guide’ us in the CV-direction, while with metadynamics we have more disperse trajectory.
      
-<div align="center">    <img src="Picture16.png" alt="" width="700"/> 
+<div align="center">    <img src="Figures/Picture16.png" alt="" width="700"/> 
  
 <div align="left"> Adversarial attacks, thus, help us to achieve the diffusive behavior in CV-direction much faster.
      
-<div align="center">    <img src="Picture17.png" alt="" width="700"/>
+<div align="center">    <img src="Figures/Picture17.png" alt="" width="700"/>
 <div align="left">
      
 ### Alanine Dipeptide
      
 Alanine Dipeptide is a common case study for enhanced sampling. We took from paper w as 0.2kJ/mol and $\sigma$ as $17^0$. We took $\tau$ as 5fs with timestep of 0.5fs. The potential is a Schnet Neural force field trained on 160k dataset of varied range of torsion angles. A normal NVE run for 1ps was done to obtain atomic frames that can be compared with both methods. Three NVE ensembles were considered at different temp of 400 K, 500 K, 600 K.
      
-<div align="center">    <img src="Picture18.png" alt="" width="700"/> 
+<div align="center">    <img src="Figures/Picture18.png" alt="" width="700"/> 
 
 <div align="left"> Each of the simulations were run for 50ps which is time consuming for NNFF. In one case, only metadynamics is used whereas in another adversarial attack is performed with a particular set of hyperparameters.
      
-<div align="center">    <img src="Picture19.png" alt="" width="700"/> 
+<div align="center">    <img src="Figures/Picture19.png" alt="" width="700"/> 
 
 <div align="left"> Preliminary jumps in adversarial attack help to get out of local regions and thus sample faster and more space in 50ps.
      
-<div align="center">    <img src="Picture20.png" alt="" width="700"/> 
+<div align="center">    <img src="Figures/Picture20.png" alt="" width="700"/> 
 <div align="left">
      
 ### Summary
